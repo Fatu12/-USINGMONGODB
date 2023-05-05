@@ -1,0 +1,316 @@
+1. Create a database called 'my_first_db'.
+    --show my_first_db
+2.Create students collection.
+    --db.createCollection("students")
+3. Each document you insert into this collection should have the following format:
+ ({name: STRING, home_state: STRING, lucky_number: NUMBER, birthday: 
+    {month: NUMBER, day: NUMBER, year: NUMBER}})
+
+    -- {
+        _id: ObjectId("6453a530c11b66390ff523e8"),
+        name: 'FATUSH',
+        home_state: 'Washington',
+        luckyNumber: 5,
+        birthday: { month: 2, day: 24, year: 2022 }
+    }
+
+4.Create 5 students with the appropriate info.
+queries:
+    my_first_db> db.students.insert({name: "Mohammed Yusuf",home_state:"Florida",lucky_number: 1,birthday:{month: 09, day :09,year: 1955}})
+[
+  {
+    _id: ObjectId("6453a010c11b66390ff523e6"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5
+  },
+  {
+    _id: ObjectId("6453a32ec11b66390ff523e7"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5
+  },
+  {
+    _id: ObjectId("6453a530c11b66390ff523e8"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5,
+    birthday: { month: 2, day: 24, year: 2022 }
+  },
+  {
+    _id: ObjectId("6453a65dc11b66390ff523e9"),
+    name: 'Jord JordI',
+    home_state: 'Washington DC',
+    lucy_number: 33,
+    birthday: { month: 12, day: 22, year: 1997 }
+  },
+  {
+    _id: ObjectId("6453a70cc11b66390ff523ea"),
+    name: 'Michel Steve',
+    home_state: 'Minnesota',
+    lucky_number: '44',
+    birthday: { month: 11, day: 11, year: 2000 }
+  },
+  {
+    _id: ObjectId("6453a7d5c11b66390ff523eb"),
+    name: 'Bitale Yusuf',
+    home_state: 'Ambo',
+    lucky_number: '34',
+    birthday: { month: 2, day: 24, year: 1998 }
+  },
+  {
+    _id: ObjectId("6453a87ac11b66390ff523ec"),
+    name: 'Mohammed Yusuf',
+    home_state: 'Florida',
+    lucky_number: 1,
+    birthday: { month: 9, day: 9, year: 1955 }
+  }
+]
+6.Get all students
+# read 
+    my_first_db> db.students.find({}).pretty()
+
+7.Retrieve all students who are from California (San Jose Dojo) or Washington (Seattle Dojo).
+queries: 
+IF WE WANT JUST WHERE IT EQUAL TO WASHINGTON 
+
+    my_first_db> db.students.find({home_state: {$eq: "Washington"}})
+
+{
+    _id: ObjectId("6453a530c11b66390ff523e8"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5,
+    birthday: { month: 2, day: 24, year: 2022 }
+  }
+  db.students.find({$or: [{home_state:'Washington'},{home_state:'California'}]})
+
+{
+    _id: ObjectId("6453a530c11b66390ff523e8"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5,
+    birthday: { month: 2, day: 24, year: 2022 }
+  }
+8.Get all students whose lucky number is greater than 3
+
+    db.students.find({lucky_number: {$gt:3}})
+
+    my_first_db>  db.students.find({ luckyNumber: {$gt:3}})
+    [
+    {
+        _id: ObjectId("6453a010c11b66390ff523e6"),
+        name: 'FATUSH',
+        home_state: 'Washington',
+        luckyNumber: 5
+    },
+    {
+        _id: ObjectId("6453a32ec11b66390ff523e7"),
+        name: 'FATUSH',
+        home_state: 'Washington',
+        luckyNumber: 5
+    },
+    {
+        _id: ObjectId("6453a530c11b66390ff523e8"),
+        name: 'FATUSH',
+        home_state: 'Washington',
+        luckyNumber: 5,
+        birthday: { month: 2, day: 24, year: 2022 }
+    }
+    ]
+ 9.Get all students whose lucky number is less than or equal to 10
+ my_first_db>  db.students.find({ luckyNumber: {$lt:10}})
+
+my_first_db>  db.students.find({lucky_numbs: {$lt:10}})
+[
+  {
+    _id: ObjectId("6453a87ac11b66390ff523ec"),
+    name: 'Mohammed Yusen',
+    home_state: 'Florida',
+    lucky_number: 1,
+    birthday: { month: 9, day: 9, year: 1955 }
+  }
+]
+
+Get all students whose lucky number is between 1 and 9 (inclusive)
+    my_first_db>  db.students.find({luckyNumber:{$gt:1,$lte: 9}})
+
+    {
+        _id: ObjectId("6453a010c11b66390ff523e6"),
+        name: 'FATUSH',
+        home_state: 'Washington',
+        luckyNumber: 5
+    },
+Add a field named 'interests' to all student documents in the collection. The field should be an array 
+and contain the following entries: 'coding', 'brunch', MongoDB'. Add this field to all documents using 
+a single command.
+            my_first_db> db.students.updateMany({},{$push:{intersts:["coding",'brunch','MongoDB']}},true)
+        {
+        acknowledged: true,
+        insertedId: null,
+        matchedCount: 8,
+        modifiedCount: 8,
+        upsertedCount: 0
+        }
+
+
+Add some unique interests for each particular student into each of their interest arrays.
+
+        my_first_db> db.students.updateMany({name: "Jord JordI"},{$push:{loans: "student loane"}})
+    {
+    acknowledged: true,
+    insertedId: null,
+    matchedCount: 1,
+    modifiedCount: 1,
+    upsertedCount: 0
+    }
+
+    Add the interest 'taxes' into someone's interest array.
+
+    my_first_db> db.students.updateOne({name: "Mohammed Yusuf"},{$push:{ interstss: "taxes"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+my_first_db> db.students.find().pretty()
+[
+  {
+    _id: ObjectId("6453a010c11b66390ff523e6"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5,
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ] ],
+    loans: [ 'intererst', 'interst_free' ]
+  },
+  {
+    _id: ObjectId("6453a32ec11b66390ff523e7"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5,
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ] ],
+    loans: [ 'intererst', 'interst_free' ]
+  },
+  {
+    _id: ObjectId("6453a530c11b66390ff523e8"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5,
+    brithday: { month: 2, day: 24, year: 2022 },
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ] ],
+    loans: [ 'intererst', 'interst_free' ]
+  },
+  {
+    _id: ObjectId("6453a65dc11b66390ff523e9"),
+    name: 'Jord JordI',
+    home_state: 'Washington DC',
+    lucy_number: 33,
+    birthday: { month: 12, day: 22, year: 1997 },
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ] ],
+    loans: [ 'intererst', 'interst_free', 'student loane' ],
+    interstss: [ 'taxese' ]
+  },
+  {
+    _id: ObjectId("6453a70cc11b66390ff523ea"),
+    name: 'Michel Steve',
+    home_state: 'Minnesota',
+    lucky_number: '44',
+    brithday: { month: 11, day: 11, year: 2000 },
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ], 'Facebook' ],
+    loans: [ 'intererst', 'interst_free' ]
+  },
+]
+Remove the 'taxes' interest you just added.
+    my_first_db> db.students.remove({intersts:"taxes"},false)
+    { acknowledged: true, deletedCount: 0 }
+    {
+    _id: ObjectId("6453a010c11b66390ff523e6"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5,
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ] ],
+    loans: [ 'intererst', 'interst_free' ]
+  },
+  {
+    _id: ObjectId("6453a32ec11b66390ff523e7"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5,
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ] ],
+    loans: [ 'intererst', 'interst_free' ]
+  },
+  {
+    _id: ObjectId("6453a530c11b66390ff523e8"),
+    name: 'FATUSH',
+    home_state: 'Washington',
+    luckyNumber: 5,
+    brithday: { month: 2, day: 24, year: 2022 },
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ] ],
+    loans: [ 'intererst', 'interst_free' ]
+  },
+  {
+    _id: ObjectId("6453a65dc11b66390ff523e9"),
+    name: 'Jord JordI',
+    home_state: 'Washington DC',
+    lucy_number: 33,
+    birthday: { month: 12, day: 22, year: 1997 },
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ] ],
+    loans: [ 'intererst', 'interst_free', 'student loane' ],
+    interstss: [ 'taxese' ]
+  },
+  
+  {
+    _id: ObjectId("6453a7d5c11b66390ff523eb"),
+    name: 'Bitale Yusuf',
+    home_state: 'Ambo',
+    lucky_number: '34',
+    brithday: { month: 2, day: 24, year: 1998 },
+    intersts: [ [ 'coding', 'brunch', 'MongoDB' ], 'Google' ],
+    loans: [ 'intererst', 'interst_free', 'Google' ],
+    loanss: [ 'Google' ]
+  },
+  
+  {
+    _id: ObjectId("64548e49c11b66390ff523ed"),
+    intersts: [
+      'coding',
+      'brunch',
+      'MongoDB',
+      [ 'coding', 'brunch', 'MongoDB' ]
+    ],
+    loans: [ 'intererst', 'interst_free' ]
+  }
+]
+
+Remove all students who are from California.
+    my_first_db> db.students.remove({home_state:"Floriday"},false)
+    { acknowledged: true, deletedCount: 0 }
+
+Remove a student by name.
+    my_first_db> db.students.remove({name:'Mohammed Yusuf'})
+    { acknowledged: true, deletedCount: 1 }
+    my_first_db> db.students.remove({name:'Jord JordI'})
+    { acknowledged: true, deletedCount: 1 }
+    my_first_db> db.students.find()
+
+    [
+  {
+    _id: ObjectId("64548e49c11b66390ff523ed"),
+    intersts: [
+      'coding',
+      'brunch',
+      'MongoDB',
+      [ 'coding', 'brunch', 'MongoDB' ]
+    ],
+    loans: [ 'intererst', 'interst_free' ]
+  }
+]
+# One thing I learn from this assignment is that careful when you delete, because it will drop all the database
+and also petition  to your  KEY name
+
+
+
+
